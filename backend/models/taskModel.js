@@ -1,5 +1,5 @@
 const { sql, poolPromise } = require('../config/db');
-const { LoginWithEmail, Signin, AddBudget, DeleteBudget, AddItems, DeleteItem, UpdateItem } = require('../controllers/taskController');
+const { LoginWithEmail, Signin, AddBudget, DeleteBudget, AddItems, DeleteItem, UpdateItem, GetBudget, GetItems } = require('../controllers/taskController');
 
 const Task = {
     async LoginWithEmail(email, password) {
@@ -9,6 +9,7 @@ const Task = {
             .input('email', sql.VarChar, email)
             .input('password', sql.VarChar, password)
             .output('message',sql.VarChar)
+            .output('UserID',sql.Int)
             .execute('Loggin');
 
             return result;
@@ -49,6 +50,7 @@ const Task = {
             .input('BudgetName', sql.VarChar, BudgetName)
             .input('BudgetAmount', sql.Float, BudgetAmount)
             .output('message',sql.VarChar)
+            .output('BudgetID',sql.Int)
             .execute('AddBudget');
 
             return result;
@@ -116,6 +118,36 @@ const Task = {
             .execute('UpdateItemPrice');
 
             return result;
+        }
+        catch(error){
+            console.error("Error executing stored procedure:", error);
+            throw error; 
+        }
+    },
+
+    async GetBudget(UserID){
+        try {
+            const pool = await poolPromise;
+            const result = await pool.request()
+                .input('UserID',sql.Int,UserID)
+                .execute('GetBudget');
+
+            return result.recordset;
+        }
+        catch(error){
+            console.error("Error executing stored procedure:", error);
+            throw error; 
+        }
+    },
+
+    async GetItems(BudgetID){
+        try {
+            const pool = await poolPromise;
+            const result = await pool.request()
+                .input('BudgetID',sql.Int,BudgetID)
+                .execute('GetItems');
+
+            return result.recordset;
         }
         catch(error){
             console.error("Error executing stored procedure:", error);

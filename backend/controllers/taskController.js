@@ -6,9 +6,10 @@ exports.LoginWithEmail = async (req,res) => {
         const {email, password} = req.body;
         const result = await Task.LoginWithEmail(email, password);
         const message = result.output.message;
+        const UserID = result.output.UserID;
         
         if(message === 'Login Successful'){
-            res.status(200).json({ message: 'Login Successful' });
+            res.status(200).json({ message: 'Login Successful', userid: UserID });
         }
         else if(message === 'Wrong Password'){
             res.status(400).json({ error: 'Wrong Password' });
@@ -53,9 +54,10 @@ exports.AddBudget = async (req,res) => {
         const {BudgetName, BudgetAmount} = req.body;
         const result = await Task.AddBudget(UserID, BudgetName, BudgetAmount);
         const message = result.output.message;
+        const BudgetID = result.output.BudgetID;
 
         if(message === 'Budget Added Successfuly'){
-            res.status(201).json({ message: 'Budget Added Successfuly' });
+            res.status(201).json({ message: 'Budget Added Successfuly', budgetID:BudgetID });
         }
         else if(message === 'Budget with this name already exist'){
             res.status(400).json({ error: 'Budget with this name already exist' });
@@ -85,6 +87,7 @@ exports.AddItems = async (req,res) => {
         const UserID = parseInt(req.params.id1)
         const BudgetID = parseInt(req.params.id2);
         const {Name, Amount} = req.body;
+        console.log("Received Item: " + { UserID, BudgetID, Name, Amount });
         const result = await Task.AddItems(UserID, BudgetID, Name, Amount);
         const message = result.output.message;
 
@@ -131,6 +134,30 @@ exports.UpdateItem = async (req,res) => {
         }
 
     } catch(error) {
+        console.error("Error creating task:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+exports.GetBudget = async (req,res) => {
+    try {
+        const UserID = parseInt(req.params.id);
+        const result = await Task.GetBudget(UserID);
+        res.json(result);
+        
+    } catch (error) {
+        console.error("Error creating task:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+exports.GetItems = async (req,res) => {
+    try {
+        const BudgetID = parseInt(req.params.id);
+        const result = await Task.GetItems(BudgetID);
+        res.json(result);
+        
+    } catch (error) {
         console.error("Error creating task:", error);
         res.status(500).json({ error: 'Internal Server Error' });
     }

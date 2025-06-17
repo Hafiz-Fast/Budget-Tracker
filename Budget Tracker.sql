@@ -55,29 +55,41 @@ GO
 Create Procedure Loggin
 @email varchar(max),
 @password varchar(30),
-@message varchar(max) output
+@message varchar(max) output,
+@UserID int output
 as begin
 
 if exists(Select 1 from Acount where @email = email and @password = AcountPassword)
 BEGIN
 set @message = 'Login Successful';
+
+declare @AcountID int;
+SELECT @AcountID = AcountID from Acount
+where @email = email and @password = AcountPassword;
+
+Select @UserID = UserID from Users
+where AcountID = @AcountID;
 end
 
 else if exists(Select 1 from Acount where @email = email and @password <> AcountPassword)
 BEGIN
 set @message = 'Wrong Password';
+set @UserID = -1;
 end
 
 else if not exists(Select 1 from Acount where @email = email)
 BEGIN
 set @message = 'Email does not exist';
+set @UserID = -1;
 END
 
 END
 
 declare @msg varchar(max);
-exec Loggin 'arham@gmail.com','hello',@msg output;
+declare @outputid2 int;
+exec Loggin 'arham@gmail.com','hello',@msg output,@outputid2 output;
 print(@msg);
+print(@outputid2);
 
 --2, For User Login i.e. Sign-in first time
 Go
@@ -126,26 +138,31 @@ Create Procedure AddBudget
 @UserID int,
 @BudgetName varchar(max),
 @BudgetAmount float,
-@message varchar(max) output
+@message varchar(max) output,
+@BudgetID int output
 as begin
 
 if not exists(Select 1 from Budget where UserID = @UserID and BudgetName = @BudgetName)
 BEGIN
 Insert into Budget(UserID,BudgetName,TotalBudget,CurrentAmount)
 VALUES (@UserID,@BudgetName,@BudgetAmount,@BudgetAmount);
+set @BudgetID = SCOPE_IDENTITY();
 set @message = 'Budget Added Successfuly';
 end
 
 ELSE
 BEGIN
+set @BudgetID = -1;
 set @message = 'Budget with this name already exist';
 end
 
 END
 
 declare @msg3 varchar(max);
-exec AddBudget 1,'Hostel Expense',3000,@msg3 output;
+declare @outputID int;
+exec AddBudget 1,'Hostel Expense',3000,@msg3 output,@outputID output;
 print (@msg3);
+print(@outputID);
 Select * from Budget;
 
 --4 Delete Budget
@@ -195,7 +212,7 @@ end
 END
 
 declare @msg4 varchar(max);
-exec AddItems 1,1,'Dinner',200,@msg4 output;
+exec AddItems 2,17,'Pen',30,@msg4 output;
 print (@msg4);
 Select * from Budget;
 Select * from Item;
@@ -310,3 +327,27 @@ exec UpdateItemPrice 1,250,@msg5 output;
 print (@msg5);
 Select * from Budget;
 Select * from Item;
+
+--8 Display Budgets for a UserID
+GO
+Create PROCEDURE GetBudget
+@UserID int
+as BEGIN
+
+Select BudgetID,BudgetName,TotalBudget,CurrentAmount,UsedAmount from Budget
+where UserID = @UserID;
+
+END
+
+--9 Display Items for a BudgetID
+Go
+Create PROCEDURE GetItems
+@BudgetID int
+as BEGIN
+
+Select ItemID,ItemName,Amount from Item
+where BudgetID = @BudgetID;
+
+end
+
+exec GetItems 12;

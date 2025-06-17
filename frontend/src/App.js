@@ -5,6 +5,7 @@ import LoginUser from './components/LoginPage';
 import SignUser from './components/SigninPage';
 import HomePage from './components/HomePage';
 import ItemPage from './components/ItemPage';
+import ChartPage from './components/ChartPage';
 
 function App() {
   return (
@@ -25,6 +26,10 @@ function App() {
 
         <Route path = "/Items/:UserID" element = {
           <ItemPage />
+        } />
+
+        <Route path="/Chart/:UserID" element = {
+          <ChartPage />
         } />
 
       </Routes>

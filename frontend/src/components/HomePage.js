@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
+import './HomePage.css';
+import Navbar from './Navbar';
 
 const HomePage = () => {
   const { UserID } = useParams();
+  const itemFormRef = React.useRef(null);
+  const [messageType, setMessageType] = useState(''); // "success" or "error"
+  const [itemMessageType, setItemMessageType] = useState('');
 
   // Budget-related state
   const [BudgetName, setName] = useState('');
@@ -34,9 +39,20 @@ const HomePage = () => {
       setName('');
       setAmount('');
       fetchBudgets(); // Refresh budgets
+
+      setMessageType('success');
+      setTimeout(() => {
+        setMessage('');
+        setMessageType('');
+      }, 2000);
     } 
     catch (error) {
       setMessage(error.message);
+      setMessageType('error');
+      setTimeout(() => {
+        setMessage('');
+        setMessageType('');
+      }, 2000);
     }
   };
 
@@ -75,9 +91,20 @@ const HomePage = () => {
       setItemName('');
       setItemAmount('');
       fetchBudgets(); // Refresh budgets
+
+      setItemMessageType('success');
+      setTimeout(() => {
+        setItemMessage('');
+        setItemMessageType('');
+      }, 2000);
     } 
     catch (error) {
       setItemMessage(error.message);
+      setItemMessageType('error');
+      setTimeout(() => {
+        setItemMessage('');
+        setItemMessageType('');
+      }, 2000);
     }
   };
 
@@ -91,60 +118,72 @@ const HomePage = () => {
     fetchBudgets();
   }, [UserID]);
 
+  const getSelectedBudgetName = () => {
+    const budget = Budgets.find(b => b.BudgetID === selectedBudgetID);
+    return budget ? budget.BudgetName : null;
+  };
+
+  const handleSelectBudget = (id) => {
+    setSelectedBudgetID(id);
+    setTimeout(() => {
+      itemFormRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100); // slight delay to allow re-render
+  };
+
   return (
-    <div>
-      <ul>
-        <li><Link to = {`/Home/${UserID}`}>Home</Link></li>
-        <li><Link to = {`/Items/${UserID}`}>Item Handling</Link></li>
-       </ul>
-      {/* Budget Form */}
-      <form onSubmit={handleBudgetSubmit}>
-        <input type="text" placeholder="Enter BudgetName" value={BudgetName} onChange={(e) => setName(e.target.value)} required />
-        <input type="number" placeholder="Enter Amount" value={BudgetAmount} onChange={(e) => setAmount(e.target.value)} required />
-        <button type="submit">Add Budget</button>
-        <p>{message}</p>
-      </form>
+    <div className="home-container">
+       <Navbar />
 
-      {/* Budgets Table with buttons */}
-      <h3>Your Budgets:</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Total</th>
-            <th>Remaining</th>
-            <th>Used</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Budgets.map((item, index) => (
-            <tr key={index}>
-              <td>{item.BudgetName}</td>
-              <td>{item.TotalBudget}</td>
-              <td>{item.CurrentAmount}</td>
-              <td>{item.UsedAmount}</td>
-              <td>
-                <button onClick={() => setSelectedBudgetID(item.BudgetID)}>
-                  Add Items
-                </button>
-                <button onClick={() => handleDeleteBudget(item.BudgetID)}>
-                    Delete Budget
-                </button>
-              </td>
+      <div className="form-section">
+        <h2>Add New Budget</h2>
+        <form onSubmit={handleBudgetSubmit}>
+          <input type="text" placeholder="Enter Budget Name" value={BudgetName} onChange={(e) => setName(e.target.value)} required />
+          <input type="number" placeholder="Enter Amount" value={BudgetAmount} onChange={(e) => setAmount(e.target.value)} required />
+          <button type="submit">Add Budget</button>
+          <p className={`message ${messageType}`}>{message}</p>
+        </form>
+      </div>
+
+      <div className="table-section">
+        <h2>Your Budgets</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Total</th>
+              <th>Remaining</th>
+              <th>Used</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {Budgets.map((item, index) => (
+              <tr key={index}>
+                <td>{item.BudgetName}</td>
+                <td>{item.TotalBudget}</td>
+                <td>{item.CurrentAmount}</td>
+                <td>{item.UsedAmount}</td>
+                <td>
+                  <button onClick={() => handleSelectBudget(item.BudgetID)}>Add Items</button>
+                  <button className="delete-btn" onClick={() => handleDeleteBudget(item.BudgetID)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      {/* Item Form */}
-      <h3>Add Item to {selectedBudgetID ? `Budget ID ${selectedBudgetID}` : '...'}</h3>
-      <form onSubmit={handleItemSubmit}>
-        <input type="text" placeholder="Enter ItemName" value={ItemName} onChange={(e) => setItemName(e.target.value)} required />
-        <input type="number" placeholder="Enter Amount" value={ItemAmount} onChange={(e) => setItemAmount(e.target.value)} required />
-        <button type="submit">Add Item</button>
-        <p>{ItemMessage}</p>
-      </form>
+      <div className="form-section" ref={itemFormRef}>
+      <h2>Add Item to {selectedBudgetID ? getSelectedBudgetName() : '...'}</h2>
+        <form onSubmit={handleItemSubmit}>
+          <input type="text" placeholder="Enter Item Name" value={ItemName} onChange={(e) => setItemName(e.target.value)} required />
+          <input type="number" placeholder="Enter Amount" value={ItemAmount} onChange={(e) => setItemAmount(e.target.value)} required />
+          <button type="submit">Add Item</button>
+          <p className={`message ${itemMessageType}`}>{ItemMessage}</p>
+        </form>
+      </div>
     </div>
+
   );
 };
 

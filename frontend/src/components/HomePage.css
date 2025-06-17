@@ -1,0 +1,125 @@
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #f1f5f9;
+  }
+  
+  .home-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    box-sizing: border-box;
+  }
+  
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    padding: 0;
+    margin-bottom: 2rem;
+  }
+  
+  .navbar a {
+    text-decoration: none;
+    color: #10b981;
+    font-weight: bold;
+  }
+  
+  .form-section {
+    background-color: #1f2937;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+  
+  .form-section h2 {
+    margin-bottom: 1rem;
+    color: #10b981;
+  }
+  
+  input,
+  button {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: none;
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+  
+  input {
+    background-color: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #334155;
+  }
+  
+  input::placeholder {
+    color: #94a3b8;
+  }
+  
+  button {
+    background: linear-gradient(to right, #10b981, #059669);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  button:hover {
+    background: linear-gradient(to right, #059669, #047857);
+  }
+  
+  .delete-btn {
+    background-color: #ef4444;
+    margin-top: 0.5rem;
+  }
+  
+  .table-section {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1f2937;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  th,
+  td {
+    text-align: center;
+    padding: 1rem;
+    border-bottom: 1px solid #334155;
+  }
+  
+  th {
+    background-color: #0f172a;
+    color: #10b981;
+  }
+  
+  .message {
+    margin-top: 0.5rem;
+    text-align: center;
+    transition: opacity 0.3s ease-in-out;
+    font-weight: 500;
+  }
+  
+  .success {
+    color: #10b981; /* green */
+  }
+  
+  .error {
+    color: #f87171; /* red */
+  }
+  
+  @media (max-width: 600px) {
+    .navbar ul {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }  

@@ -12,7 +12,7 @@ const LoginUser = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/api/Login', {
+      const response = await fetch('https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

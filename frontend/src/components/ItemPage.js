@@ -15,21 +15,21 @@ const ItemPage = () => {
     const [messageType, setMessageType] = useState('');
     
     const fetchBudgets = () => {
-        axios.get(`http://localhost:5000/api/Budget/${UserID}`)
+        axios.get(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Budget/${UserID}`)
           .then(res => setBudgets(res.data))
           .catch(err => console.error(err));
     };
 
     const fetchItems = (BudgetID) => {
         setSelectedBudgetID(BudgetID);
-        axios.get(`http://localhost:5000/api/Items/${BudgetID}/`)
+        axios.get(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Items/${BudgetID}/`)
           .then(res => setItems(res.data))
           .catch(err => console.error(err));
     };
 
     const handleDeleteItem = async (ItemID) => {
         try{
-            await fetch(`http://localhost:5000/api/Items/${ItemID}`, {
+            await fetch(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Items/${ItemID}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -54,7 +54,7 @@ const ItemPage = () => {
         }
 
         try {
-          const response = await fetch(`http://localhost:5000/api/Items/${selectedItemID}`, {
+          const response = await fetch(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Items/${selectedItemID}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ NewAmount:parseFloat(NewAmount) }),

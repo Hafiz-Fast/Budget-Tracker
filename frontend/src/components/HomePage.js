@@ -26,7 +26,7 @@ const HomePage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:5000/api/Budget/${UserID}`, {
+      const response = await fetch(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Budget/${UserID}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ BudgetName, BudgetAmount }),
@@ -58,7 +58,7 @@ const HomePage = () => {
 
   const handleDeleteBudget = async (budgetID) => {
     try{
-        await fetch(`http://localhost:5000/api/Budget/${UserID}/${budgetID}`, {
+        await fetch(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Budget/${UserID}/${budgetID}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -78,7 +78,7 @@ const HomePage = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/Items/${UserID}/${selectedBudgetID}`, {
+      const response = await fetch(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Items/${UserID}/${selectedBudgetID}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ Name: ItemName, Amount: parseFloat(ItemAmount) }),
@@ -109,7 +109,7 @@ const HomePage = () => {
   };
 
   const fetchBudgets = () => {
-    axios.get(`http://localhost:5000/api/Budget/${UserID}`)
+    axios.get(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Budget/${UserID}`)
       .then(res => setBudgets(res.data))
       .catch(err => console.error(err));
   };

@@ -30,7 +30,7 @@ const ChartPage = () => {
   const [budgets, setBudgets] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/Budget/${UserID}`)
+    axios.get(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Budget/${UserID}`)
       .then(res => setBudgets(res.data))
       .catch(err => console.error(err));
   }, [UserID]);

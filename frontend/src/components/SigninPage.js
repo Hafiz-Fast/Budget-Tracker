@@ -17,7 +17,7 @@ const SignUser = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/api/Signin', {
+      const response = await fetch('https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fname, lname, Age, Gender, UserType, email, password }),

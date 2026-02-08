@@ -10,8 +10,7 @@ const dbConfig = {
   database: process.env.DB_NAME,
   // port: 1433, 
   options: {
-    encrypt: false, // Set to true if using Azure
-    enableArithAbort: true,
+    encrypt: true, // Set to true if using Azure
     trustServerCertificate: true,
   },
 };

@@ -17,6 +17,11 @@ app.get('/', (req, res) => {
     res.send('Hello from Node.js Backend!');
 });
 
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+/* For mobile frontend
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on http://192.168.1.217:${PORT}`);
-});
+});*/

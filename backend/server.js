@@ -4,7 +4,9 @@ const taskRoutes = require('./routes/taskRoutes');
 const app = express();
 
 app.use(express.json()); 
-app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
 app.use('/api', taskRoutes);
 app.use((err, req, res, next) => {
     console.error(err.stack);

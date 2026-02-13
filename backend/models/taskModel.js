@@ -1,10 +1,10 @@
-const { sql, poolPromise } = require('../config/db');
+const { sql, getPool } = require('../config/db');
 const { LoginWithEmail, Signin, AddBudget, DeleteBudget, AddItems, DeleteItem, UpdateItem, GetBudget, GetItems } = require('../controllers/taskController');
 
 const Task = {
     async LoginWithEmail(email, password) {
         try{
-            const pool = await poolPromise;
+            const pool = await getPool();
             let result = await pool.request()
             .input('email', sql.VarChar, email)
             .input('password', sql.VarChar, password)
@@ -22,7 +22,7 @@ const Task = {
 
     async Signin(fname, lname, Age, Gender, UserType, email, password) {
         try{
-            const pool = await poolPromise;
+            const pool = await getPool();
             let result = await pool.request()
             .input('fname', sql.VarChar, fname)
             .input('lname', sql.VarChar, lname)
@@ -44,7 +44,7 @@ const Task = {
 
     async AddBudget(UserID, BudgetName, BudgetAmount) {
         try{
-            const pool = await poolPromise;
+            const pool = await getPool();
             let result = await pool.request()
             .input('UserID', sql.Int, UserID)
             .input('BudgetName', sql.VarChar, BudgetName)
@@ -63,7 +63,7 @@ const Task = {
 
     async DeleteBudget(UserID, BudgetID) {
         try{
-            const pool = await poolPromise;
+            const pool = await getPool();
             await pool.request()
             .input('UserID', sql.Int, UserID)
             .input('BudgetID', sql.Int, BudgetID)
@@ -78,7 +78,7 @@ const Task = {
 
     async AddItems(UserID, BudgetID, Name, Amount) {
         try{
-            const pool = await poolPromise;
+            const pool = await getPool();
             let result = await pool.request()
             .input('UserID', sql.Int, UserID)
             .input('BudgetID', sql.Int, BudgetID)
@@ -97,7 +97,7 @@ const Task = {
 
     async DeleteItem(ItemID) {
         try{
-            const pool = await poolPromise;
+            const pool = await getPool();
             await pool.request()
             .input('ItemID', sql.Int, ItemID)
             .execute('DeleteItem');
@@ -110,7 +110,7 @@ const Task = {
 
     async UpdateItem(ItemID, NewAmount) {
         try{
-            const pool = await poolPromise;
+            const pool = await getPool();
             let result = await pool.request()
             .input('ItemID', sql.Int, ItemID)
             .input('NewAmount', sql.Float, NewAmount)
@@ -127,7 +127,7 @@ const Task = {
 
     async GetBudget(UserID){
         try {
-            const pool = await poolPromise;
+            const pool = await getPool();
             const result = await pool.request()
                 .input('UserID',sql.Int,UserID)
                 .execute('GetBudget');
@@ -142,7 +142,7 @@ const Task = {
 
     async GetItems(BudgetID){
         try {
-            const pool = await poolPromise;
+            const pool = await getPool();
             const result = await pool.request()
                 .input('BudgetID',sql.Int,BudgetID)
                 .execute('GetItems');

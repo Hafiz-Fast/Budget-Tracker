@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SigninPage.css';
+import { baseUrl } from '../config';
 
 const SignUser = () => {
   const [fname, setFname] = useState('');
@@ -11,13 +12,16 @@ const SignUser = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false); // loading state added
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);  // start loading
+    setMessage('');    // clear previous message
 
     try {
-      const response = await fetch('https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Signin', {
+      const response = await fetch(`${baseUrl}/api/Signin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fname, lname, Age, Gender, UserType, email, password }),
@@ -45,6 +49,8 @@ const SignUser = () => {
     } catch (error) {
       console.error('Error:', error.message);
       setMessage(error.message);
+    } finally {
+      setLoading(false); // stop loading
     }
   };
 
@@ -53,18 +59,18 @@ const SignUser = () => {
       <form className="signup-form" onSubmit={handleSubmit}>
         <h2>Create Account</h2>
 
-        <input type="text" placeholder="First Name" value={fname} onChange={(e) => setFname(e.target.value)} required />
-        <input type="text" placeholder="Last Name" value={lname} onChange={(e) => setLname(e.target.value)} required />
-        <input type="number" placeholder="Age" value={Age} onChange={(e) => setAge(e.target.value)} required />
+        <input type="text" placeholder="First Name" value={fname} onChange={(e) => setFname(e.target.value)} required disabled={loading} />
+        <input type="text" placeholder="Last Name" value={lname} onChange={(e) => setLname(e.target.value)} required disabled={loading} />
+        <input type="number" placeholder="Age" value={Age} onChange={(e) => setAge(e.target.value)} required disabled={loading} />
 
-        <input list="GenderOptions" placeholder="Gender" value={Gender} onChange={(e) => setGender(e.target.value)} required />
+        <input list="GenderOptions" placeholder="Gender" value={Gender} onChange={(e) => setGender(e.target.value)} required disabled={loading} />
         <datalist id="GenderOptions">
           <option value="Male" />
           <option value="Female" />
           <option value="Other" />
         </datalist>
 
-        <input list="UserTypes" placeholder="User Type" value={UserType} onChange={(e) => setUserType(e.target.value)} required />
+        <input list="UserTypes" placeholder="User Type" value={UserType} onChange={(e) => setUserType(e.target.value)} required disabled={loading} />
         <datalist id="UserTypes">
           <option value="Student" />
           <option value="Business Man" />
@@ -72,10 +78,12 @@ const SignUser = () => {
           <option value="House Wife" />
         </datalist>
 
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={loading} />
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required disabled={loading} />
 
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Signing Up...' : 'Sign Up'}
+        </button>
         <p className="message">{message}</p>
       </form>
     </div>

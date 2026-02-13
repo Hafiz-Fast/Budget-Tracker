@@ -13,6 +13,7 @@ import {
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Pie, Bar } from 'react-chartjs-2';
+import { baseUrl } from '../config';
 
 // Register chart elements
 ChartJS.register(
@@ -30,7 +31,7 @@ const ChartPage = () => {
   const [budgets, setBudgets] = useState([]);
 
   useEffect(() => {
-    axios.get(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Budget/${UserID}`)
+    axios.get(`${baseUrl}/api/Budget/${UserID}`)
       .then(res => setBudgets(res.data))
       .catch(err => console.error(err));
   }, [UserID]);

@@ -1,0 +1,1 @@
+export const baseUrl = 'https://backend-df7noy1ry-hafiz-fasts-projects.vercel.app';

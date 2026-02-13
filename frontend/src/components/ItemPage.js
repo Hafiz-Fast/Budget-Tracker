@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import './ItemPage.css';
 import Navbar from './Navbar';
+import { baseUrl } from '../config';
 
 const ItemPage = () => {
     const { UserID } = useParams();
@@ -15,21 +16,21 @@ const ItemPage = () => {
     const [messageType, setMessageType] = useState('');
     
     const fetchBudgets = () => {
-        axios.get(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Budget/${UserID}`)
+        axios.get(`${baseUrl}/api/Budget/${UserID}`)
           .then(res => setBudgets(res.data))
           .catch(err => console.error(err));
     };
 
     const fetchItems = (BudgetID) => {
         setSelectedBudgetID(BudgetID);
-        axios.get(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Items/${BudgetID}/`)
+        axios.get(`${baseUrl}/api/Items/${BudgetID}/`)
           .then(res => setItems(res.data))
           .catch(err => console.error(err));
     };
 
     const handleDeleteItem = async (ItemID) => {
         try{
-            await fetch(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Items/${ItemID}`, {
+            await fetch(`${baseUrl}/api/Items/${ItemID}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -54,7 +55,7 @@ const ItemPage = () => {
         }
 
         try {
-          const response = await fetch(`https://budgettracker-e4fecfgjbkfng9gf.centralindia-01.azurewebsites.net/api/Items/${selectedItemID}`, {
+          const response = await fetch(`${baseUrl}/api/Items/${selectedItemID}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ NewAmount:parseFloat(NewAmount) }),
